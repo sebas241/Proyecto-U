@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tabla de Tareas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f3f4f6;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #2563eb;
+    }
+
+    .input-container {
+      margin-bottom: 20px;
+    }
+
+    input {
+      padding: 8px;
+      width: 250px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      outline: none;
+    }
+
+    button {
+      padding: 8px 15px;
+      margin-left: 5px;
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #1e40af;
+    }
+
+    table {
+      width: 80%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    th {
+      background-color: #2563eb;
+      color: white;
+    }
+
+    tr:hover {
+      background-color: #f1f5f9;
+    }
+
+    .completada {
+      text-decoration: line-through;
+      color: gray;
+    }
+
+    .btn-eliminar {
+      background-color: #dc2626;
+    }
+
+    .btn-eliminar:hover {
+      background-color: #b91c1c;
+    }
+
+    .btn-completar {
+      background-color: #16a34a;
+    }
+
+    .btn-completar:hover {
+      background-color: #15803d;
+    }
+  </style>
+</head>
+<body>
+  <h1>Tabla de Tareas</h1>
+
+  <div class="input-container">
+    <input type="text" id="tareaInput" placeholder="Escribe una tarea..." />
+    <button onclick="agregarTarea()">Agregar</button>
+  </div>
+
+  <table id="tablaTareas">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Tarea</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody id="cuerpoTabla">
+      <!-- Las tareas se agregarán aquí -->
+    </tbody>
+  </table>
+
+  <script>
+    let tareas = [];
+
+    function agregarTarea() {
+      const input = document.getElementById('tareaInput');
+      const texto = input.value.trim();
+
+      if (texto === '') return alert('Escribe una tarea primero.');
+
+      tareas.push({ nombre: texto, completada: false });
+      input.value = '';
+      mostrarTareas();
+    }
+
+    function mostrarTareas() {
+      const cuerpo = document.getElementById('cuerpoTabla');
+      cuerpo.innerHTML = '';
+
+      tareas.forEach((tarea, i) => {
+        const fila = document.createElement('tr');
+        fila.innerHTML = `
+          <td>${i + 1}</td>
+          <td class="${tarea.completada ? 'completada' : ''}">${tarea.nombre}</td>
+          <td>${tarea.completada ? '✅' : '⏳'}</td>
+          <td>
+            <button class="btn-completar" onclick="toggleCompletar(${i})">
+              ${tarea.completada ? 'Desmarcar' : 'Completar'}
+            </button>
+            <button class="btn-eliminar" onclick="eliminarTarea(${i})">Eliminar</button>
+          </td>
+        `;
+        cuerpo.appendChild(fila);
+      });
+    }
+
+    function toggleCompletar(index) {
+      tareas[index].completada = !tareas[index].completada;
+      mostrarTareas();
+    }
+
+    function eliminarTarea(index) {
+      tareas.splice(index, 1);
+      mostrarTareas();
+    }
+  </script>
+</body>
+</html>
+
+
